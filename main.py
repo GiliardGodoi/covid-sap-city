@@ -1,34 +1,23 @@
-
 from datetime import datetime
 
 import pandas as pd
-from os import path
-from openpyxl import load_workbook
+from rich.traceback import install
 
-today = datetime.now()
-date = datetime(today.year, today.month, today.day)
+from src.questioner import ask4YesOrNo, ask4date, ask4int, ask4option, greeting
 
-
-print(f"Hoje é {today.day}/{today.month}/{today.year}")
-answer = input("[S / N]   ")
-# if answer.upper() == 'S':
-    # date = datetime(today.year, today.month, today.day)
-
-print(answer)
-
-print(10*'- ')
-print("Inserir dados: \n\n")
+install()
 
 fields = [
-    "Descartados:  ",
-    "Em investigação:  ",
-    "Confirmados:  ",
-    "Examinados:  ",
-    "Recuperados:  ",
-    "Ativos:  ",
-    "Hospitalizados:  ",
-    "Domicílio:  ",
-    "Óbitos:  "
+    "Data",
+    "Descartados",
+    "Em investigação",
+    "Confirmados",
+    "Examinados",
+    "Recuperados",
+    "Ativos",
+    "Hospitalizados",
+    "Domicílio",
+    "Óbitos"
 ]
 
 columns = [
@@ -44,38 +33,30 @@ columns = [
     "OBITOS"
 ]
 
-data = [date]
+msg = '''
+# Boletins Diário Santo Antônio da Platina - PR
 
-for field in fields:
-    answer = input(field)
-    try:
-        value = int(answer)
-    except ValueError:
-        value = 0
-    data.append(value)
+Utilitário para coletar os dados dos boletins diários sobre os casos de *COVID-19* no Município de Santo Antônio da Platina - PR
+
+'''
+
+greeting(msg)
+
+width = max(len(f) for f in fields) + 2
+
+data = list()
+
+go_on = True
+
+while go_on:
+    line = list()
+    for i, field in enumerate(fields):
+        if i == 0:
+            ans = ask4date(f"{field}:", justify='left', width=width, default=datetime.now())
+        else:
+            ans = ask4int(f"{field}:", justify='left', width=width, default=0)
+        line.append(ans)
+    go_on = ask4YesOrNo("Deseja continuar?")
+    data.append(line)
 
 print(data)
-
-df = pd.DataFrame([data], columns=columns)
-
-# df.to_excel("teste.xlsx", index=False)
-## https://betterprogramming.pub/using-python-pandas-with-excel-d5082102ca27
-in_excel = path.join("data", "raw", "BOLETIM_DIARIO_CORONAVIRUS_SAP.xlsx")
-
-writer = pd.ExcelWriter(in_excel, engine='openpyxl')
-# try to open an existing workbook
-writer.book = load_workbook(in_excel)
-
-# copy existing sheets
-writer.sheets = dict((ws.title, ws) for ws in writer.book.worksheets if ws.title != "Sheet1")
-
-reader = pd.read_excel(in_excel, engine="openpyxl")
-reader.dropna(how='all')
-
-df.to_excel(writer,
-            sheet_name="Planilha1",
-            index=False,
-            header=False,
-            startrow=len(reader))
-
-writer.close()
