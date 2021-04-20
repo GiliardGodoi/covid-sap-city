@@ -48,29 +48,29 @@ def timeseries_compare_confirmed_understudy(frame, dest=None):
         plt.savefig(path.join(dest, '01-evolucao-casos.png'))
 
 
-def timeseries_compare_active_understudy(frame, dest=None):
+def timeseries_active_understudy(frame, dest=None):
     '''
-    Title: SAP - COVID-19 - Relação entre casos ativos e em investivação
+    Title: Santo Antônio da Platina - COVID-19
 
     Columns:
-        EM INVESTIGAÇÃO
         ATIVOS
+        EM INVESTIGAÇÃO
 
     Notes:
     '''
     plt.figure()
-    ax = sns.lineplot(data=frame[['EM INVESTIGACAO', 'ATIVOS']],
+    ax = sns.lineplot(data=frame[['ATIVOS','EM INVESTIGACAO']],
                 palette="tab10"
                 )
-
-    _ = ax.set_title("SAP - COVID-19 - Relação entre casos ativos e em investivação")
+    _ = ax.set_title("Santo Antônio da Platina - COVID-19")
     ax.yaxis.set_major_locator(MaxNLocator(integer=True))
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %y"))
-    ax.xaxis.grid(False)
+    # ax.set_ylim([-10, 300])
+    ax.xaxis.grid()
     sns.despine(left=True)
 
     if dest is not None and path.exists(dest):
-        plt.savefig(path.join(dest, '02-casos-ativos-e-investigacao.png'))
+        plt.savefig(path.join(dest, '02-relacao-ativos-investigacao.png'))
 
 
 def timeseries_active_cases(frame, dest=None):
@@ -142,31 +142,6 @@ def timeseries_confirmed_recoveries(frame, dest=None):
         plt.savefig(path.join(dest, '05-relacao-confirmados-recuperados.png'))
 
 
-def timeseries_active_understudy(frame, dest=None):
-    '''
-    Title: Santo Antônio da Platina - COVID-19
-
-    Columns:
-        ATIVOS
-        EM INVESTIGAÇÃO
-
-    Notes:
-    '''
-    plt.figure()
-    ax = sns.lineplot(data=frame[['ATIVOS','EM INVESTIGACAO']],
-                palette="tab10"
-                )
-    _ = ax.set_title("Santo Antônio da Platina - COVID-19")
-    ax.yaxis.set_major_locator(MaxNLocator(integer=True))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %y"))
-    # ax.set_ylim([-10, 300])
-    ax.xaxis.grid()
-    sns.despine(left=True)
-
-    if dest is not None and path.exists(dest):
-        plt.savefig(path.join(dest, '06-relacao-ativos-investigacao.png'))
-
-
 def moving_means(frame, days=7, dest=None):
     '''
     Title: SAP - Covid19 - Média móvel
@@ -186,7 +161,7 @@ def moving_means(frame, days=7, dest=None):
     sns.despine(left=True)
 
     if dest is not None and path.exists(dest):
-        plt.savefig(path.join(days, '07-media-movel.png'))
+        plt.savefig(path.join(days, '06-media-movel.png'))
 
 
 def timeseries_deaths_evolution(frame, dest=None):
@@ -207,7 +182,7 @@ def timeseries_deaths_evolution(frame, dest=None):
     _ = fig.set(title="Evolução do número de óbitos")
     plt.tight_layout()
     if dest is not None and path.exists(dest):
-        plt.savefig(path.join(dest, '08-evolucao-obitos.png'))
+        plt.savefig(path.join(dest, '07-evolucao-obitos.png'))
 
 
 def barplot_deaths_per_month(frame, dest=None):
@@ -262,7 +237,7 @@ def barplot_deaths_per_month(frame, dest=None):
     sns.despine(left=True)
 
     if dest is not None and path.exists(dest):
-        plt.savefig(path.join(dest, '09-evolucao-obitos-por-mes.png'))
+        plt.savefig(path.join(dest, '08-evolucao-obitos-por-mes.png'))
 
 
 def barplot_week_evolution(frame, dest=None):
@@ -291,3 +266,6 @@ def barplot_week_evolution(frame, dest=None):
     plt.tight_layout()
 
     sns.despine(left=True)
+
+    if dest is not None and path.exists(dest):
+        plt.savefig(path.join(dest, '09-compara-novos-casos-recuperados-dia.png'))
